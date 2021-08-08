@@ -36,6 +36,8 @@ public class Movement : MonoBehaviour
                 audioSource.Play();
             rb.AddRelativeForce(Vector3.up * (mainThrustSpeed * Time.deltaTime));
         }
+        else
+            audioSource.Stop();
     }
 
     /// Rotate are player left or right when a d or left right is press
