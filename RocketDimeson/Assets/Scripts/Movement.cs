@@ -12,12 +12,13 @@ public class Movement : MonoBehaviour
     [SerializeField] private float mainThrustSpeed = 10;
     [SerializeField] private float rotateSpeed = 10;
     //the Rigidbody attach to are player
-    private Rigidbody _rb;
+    private Rigidbody rb;
+    private AudioSource audioSource;
 
     // this function will setup are script
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -26,18 +27,14 @@ public class Movement : MonoBehaviour
         ProcessRotation();
     }
 
-    /// <summary>
     /// Move are player the relative up
-    /// </summary>
     private void ProcessThrust()
     {
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-            _rb.AddRelativeForce(Vector3.up * (mainThrustSpeed * Time.deltaTime));
+            rb.AddRelativeForce(Vector3.up * (mainThrustSpeed * Time.deltaTime));
     }
 
-    /// <summary>
-    /// Rotate are player left or right
-    /// </summary>
+    /// Rotate are player left or right when a d or left right is press
     private void ProcessRotation()
     {
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -48,8 +45,8 @@ public class Movement : MonoBehaviour
 
     private void ApplyRotation(float rotation)
     {
-        _rb.freezeRotation = true; // freezing rotation so we can manually rotate
+        rb.freezeRotation = true; // freezing rotation so we can manually rotate
         transform.Rotate(Vector3.forward * (rotation * Time.deltaTime));
-        _rb.freezeRotation = false; // unfreezing rotation so physics can take over
+        rb.freezeRotation = false; // unfreezing rotation so physics can take over
     }
 }
