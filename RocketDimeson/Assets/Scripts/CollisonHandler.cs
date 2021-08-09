@@ -1,7 +1,11 @@
 ﻿/* copyright(c) by LeviStudios;
  * RocketDimeson CollisonHandler copyright(c) by LeviStudios;
  */
+
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class CollisonHandler : MonoBehaviour
 {
@@ -17,8 +21,14 @@ public class CollisonHandler : MonoBehaviour
 				break;
 			
 			default:
-				Debug.Log("You Crash");
+				LoadLevel();
 				break;
 		}
+	}
+
+	private void LoadLevel()
+	{
+		var CurrentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+		SceneManager.LoadScene(CurrentSceneIndex);
 	}
 }
