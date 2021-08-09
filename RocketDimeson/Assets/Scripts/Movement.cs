@@ -18,6 +18,8 @@ public class Movement : MonoBehaviour
 		audioSource = GetComponent<AudioSource>();
 	}
 
+	private void OnDisable() => audioSource.Stop();
+
 	private void Update()
 	{
 		ProcessThrust();
