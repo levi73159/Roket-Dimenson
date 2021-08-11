@@ -7,16 +7,48 @@ using UnityEngine.SceneManagement;
 
 public class CollisonHandler : MonoBehaviour
 {
-	[SerializeField] private float loadLevelDelay = .3f;
-	private Movement movementScript;
+	
+	#region vars
 
+	/*
+	 * public:
+	 *	values (float, float[], int, int[], double, double[])
+	 *	cs (CLASSNAME, CLASSNAME[], StructName, StructName[])
+	 *	cache (cs)
+	 *	states (bool, bool[], Enum, Enum[])
+	 *
+	 * pricate:
+     *	values (float, float[], int, int[], double, double[])
+     *	cs (CLASSNAME, CLASSNAME[], StructName, StructName[])
+     *	cache (cs)
+     *	states (bool, bool[], Enum, Enum[])
+	 */
+	
+	[SerializeField] private float loadLevelDelay = 1;
+	[SerializeField] private float restartLevelDelay = 2;
+	[SerializeField] private AudioClip crashSFX;
+	[SerializeField] private AudioClip successSFX;
+	[SerializeField] private ParticleSystem[] crashEffects;
+	[SerializeField] private ParticleSystem successEffect;
+
+	private AudioSource audioSource; // the audio source on this gameObject
+	private Movement movementScript; // the movement script on this gameObject
+	
+	
+	private bool isTransiting = false; // so we dont play multi audio
+
+	#endregion
+	
 	private void Awake()
 	{
 		movementScript = GetComponent<Movement>();
+		audioSource = GetComponent<AudioSource>();
 	}
 
 	private void OnCollisionEnter(Collision other)
 	{
+		if (isTransiting) return;
+		
 		switch (other.gameObject.tag)
 		{
 			case "Friendly":
@@ -34,10 +66,47 @@ public class CollisonHandler : MonoBehaviour
 
 	private void StartCrash()
 	{
-		// todo add SFX on Crash
-		// todo add partials on Crash
+		isTransiting = true;
+
+		StartCrashEffectsAndAudio();
+		Invoke(nameof(ReloadLevel), restartLevelDelay);
+	}
+
+	private void StartLoadLevel()
+	{
+		isTransiting = true;
+		
+		StartSuccessesEffectsAndAudio();
+		Invoke(nameof(LoadNextLevel), loadLevelDelay);
+	}
+
+	#region extraMethods
+
+	private void StartSuccessesEffectsAndAudio()
+	{
+		successEffect.Play();
 		movementScript.enabled = false;
-		Invoke(nameof(ReloadLevel), loadLevelDelay);
+		audioSource.PlayOneShot(successSFX);
+	}
+	
+	private void StartCrashEffectsAndAudio()
+	{
+		foreach (var crashEffect in crashEffects)
+			crashEffect.Play();
+
+		movementScript.enabled = false;
+		audioSource.PlayOneShot(crashSFX);
+	}
+	
+	private void LoadNextLevel()
+	{
+		var nextSceneIndex = 
+			SceneManager.GetActiveScene().buildIndex+1 >= SceneManager.sceneCountInBuildSettings
+				? 1
+				: SceneManager.GetActiveScene().buildIndex+1;
+
+		RandomColor.NewRGColors();
+		SceneManager.LoadScene(nextSceneIndex);
 	}
 	
 	private void ReloadLevel()
@@ -46,22 +115,5 @@ public class CollisonHandler : MonoBehaviour
 		SceneManager.LoadScene(currentSceneIndex);
 	}
 
-	private void StartLoadLevel()
-	{
-		// todo add SFX on Success
-		// todo add partials on Success
-		movementScript.enabled = false;
-		Invoke(nameof(LoadNextLevel), loadLevelDelay);
-	}
-	
-	private void LoadNextLevel()
-	{
-		var nextSceneIndex = 
-			SceneManager.GetActiveScene().buildIndex+1 >= SceneManager.sceneCountInBuildSettings
-			? 1
-			: SceneManager.GetActiveScene().buildIndex+1;
-
-		RandomColor.NewRGColors();
-		SceneManager.LoadScene(nextSceneIndex);
-	}
+	#endregion
 }

@@ -6,10 +6,17 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+	#region vars
+
 	[SerializeField] private float mainThrustSpeed = 10;
 	[SerializeField] private float rotateSpeed = 10;
+	[SerializeField] private AudioClip thrustSFX;
+	[SerializeField] private ParticleSystem mainThrusterEffect;
+
 	private AudioSource audioSource;
-	private Rigidbody rb; //the Rigidbody attach to are player
+	private Rigidbody rb;
+
+	#endregion
 
 	// this function will setup are script
 	private void Awake()
@@ -18,7 +25,7 @@ public class Movement : MonoBehaviour
 		audioSource = GetComponent<AudioSource>();
 	}
 
-	private void OnDisable() => audioSource.Stop();
+	private void OnDisable() => StopThrusting();
 
 	private void Update()
 	{
@@ -31,23 +38,44 @@ public class Movement : MonoBehaviour
 	{
 		if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
 		{
-			if (!audioSource.isPlaying)
-				audioSource.Play();
-			rb.AddRelativeForce(Vector3.up * (mainThrustSpeed * Time.deltaTime));
+			StartTrusting();
 		}
 		else
 		{
-			audioSource.Stop();
+			StopThrusting();
 		}
 	}
-
+	
 	/// Rotate are player left or right when a d or left right is press
 	private void ProcessRotation()
 	{
 		if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+		{
 			ApplyRotation(rotateSpeed);
+		}
 		else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+		{
 			ApplyRotation(-rotateSpeed);
+		}
+	}
+
+	#region extraMethods
+
+	private void StartTrusting()
+	{
+		if (!audioSource.isPlaying)
+			audioSource.PlayOneShot(thrustSFX);
+		
+		if (!mainThrusterEffect.isPlaying)
+			mainThrusterEffect.Play();
+
+		rb.AddRelativeForce(Vector3.up * (mainThrustSpeed * Time.deltaTime));
+	}
+	
+	private void StopThrusting()
+	{
+		audioSource.Stop();
+		mainThrusterEffect.Stop();
 	}
 
 	private void ApplyRotation(float rotation)
@@ -56,4 +84,6 @@ public class Movement : MonoBehaviour
 		transform.Rotate(Vector3.forward * (rotation * Time.deltaTime));
 		rb.freezeRotation = false; // unfreezing rotation so physics can take over
 	}
+
+	#endregion
 }
