@@ -23,6 +23,11 @@ public class Movement : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody>();
 		audioSource = GetComponent<AudioSource>();
+		Debuger.Current.Add(new HotKey(delegate { audioSource.PlayOneShot(thrustSFX); }, KeyCode.T, false));
+		Debuger.Current.Add(new HotKey(delegate { mainThrustSpeed += 10; }, KeyCode.F, false, true));
+		Debuger.Current.Add(new HotKey(delegate { mainThrustSpeed -= 10; }, KeyCode.G, false, true));
+		Debuger.Current.Add(new HotKey(delegate { rotateSpeed += 10; }, KeyCode.V, false, true));
+		Debuger.Current.Add(new HotKey(delegate { rotateSpeed -= 10; }, KeyCode.B, false, true));
 	}
 
 	private void OnDisable() => StopThrusting();
@@ -31,6 +36,7 @@ public class Movement : MonoBehaviour
 	{
 		ProcessThrust();
 		ProcessRotation();
+		Debuger.Current.ProcessInput();
 	}
 
 	/// Move are player the relative up

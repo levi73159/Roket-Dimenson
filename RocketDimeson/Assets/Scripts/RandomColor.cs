@@ -3,13 +3,13 @@
  */
 
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class RandomColor : MonoBehaviour
 {
 	public static void NewRGColors()
 	{
 		var randomColors = FindObjectsOfType<RandomColor>();
+		GameAssets.I.camera_.backgroundColor = Random.ColorHSV();
 
 		foreach (var item in randomColors)
 		{

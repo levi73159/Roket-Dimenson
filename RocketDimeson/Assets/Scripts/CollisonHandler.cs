@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class CollisonHandler : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class CollisonHandler : MonoBehaviour
 	
 	
 	private bool isTransiting = false; // so we dont play multi audio
+	private bool collisonEnable = true; // for debuger
 
 	#endregion
 	
@@ -43,11 +45,20 @@ public class CollisonHandler : MonoBehaviour
 	{
 		movementScript = GetComponent<Movement>();
 		audioSource = GetComponent<AudioSource>();
+		Debuger.Current.Add(new HotKey(StartCrash, KeyCode.End));
+		Debuger.Current.Add(new HotKey(LoadNextLevel, KeyCode.L));
+		Debuger.Current.Add(new HotKey(delegate { audioSource.PlayOneShot(crashSFX); }, KeyCode.Y, false));
+		Debuger.Current.Add(new HotKey(delegate { audioSource.PlayOneShot(successSFX); }, KeyCode.U, false));
+		Debuger.Current.Add(new HotKey(
+			delegate { GetComponent<BoxCollider>().enabled = !GetComponent<BoxCollider>().enabled; }, KeyCode.C));
+		Debuger.Current.Add(new HotKey(delegate { collisonEnable = !collisonEnable; }, KeyCode.X));
+
 	}
 
 	private void OnCollisionEnter(Collision other)
 	{
 		if (isTransiting) return;
+		if (!collisonEnable) return;
 		
 		switch (other.gameObject.tag)
 		{
