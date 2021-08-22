@@ -77,7 +77,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 4649542681185516368}
   - component: {fileID: 1467611530157821807}
   - component: {fileID: 2715582308536211749}
+  - component: {fileID: 109952277147432034}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -298,6 +299,18 @@ MonoBehaviour:
   - {fileID: 4692023214956397023}
   - {fileID: 961055571167516125}
   successEffect: {fileID: 4003889316677103842}
+--- !u!114 &109952277147432034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4649542681096606323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a43aa42257335e44839e30767ab207e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7077638424702246866
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +388,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295

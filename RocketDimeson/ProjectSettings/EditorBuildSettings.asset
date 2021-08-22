@@ -23,4 +23,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Throgh.unity
     guid: a08b355569726ac4f83515914b83dfb3
+  - enabled: 1
+    path: Assets/Scenes/BigRock.unity
+    guid: 72a9389c92a2eae438eb7d0d0dbfd415
+  - enabled: 1
+    path: Assets/Scenes/Cave.unity
+    guid: 3992bedb7028ff146a4214593cac4715
+  - enabled: 1
+    path: Assets/Scenes/Doge.unity
+    guid: 61f047f26e597104ba85af914b6fb02b
   m_configObjects: {}
